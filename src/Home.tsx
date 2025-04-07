@@ -7,14 +7,14 @@ import './Home.css';
 function Home() {
   return(
     <div className='main-nav'>
-      <p>Destinos</p>
-      <button>Sobre nosotros</button>
-      <p>|</p>
+      <p className = 'nav-text'>Destinos</p>
+      <button className = 'nav-text'>Sobre nosotros</button>
+      <p className = 'nav-separator'>|</p>
       <div className= 'nav-icons'>
-        <img src={logoIg}/>
-        <img src={logoX}/>
-        <img src={logoPin}/>
-        <img src={logoCont}/>
+        <img className='nav-logo' src={logoIg}/>
+        <img className= 'nav-logo-tw' src={logoX}/>
+        <img className= 'nav-logo' src={logoPin}/>
+        <img className= 'nav-logo' src={logoCont}/>
       </div>
     </div>
   );

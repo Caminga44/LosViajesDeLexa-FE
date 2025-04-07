@@ -1,26 +1,23 @@
-import React from 'react';
-import logo from './assets/logos/Logo-Contacto.png';
+import logoIg from './assets/logos/Logo-Insta.png';
+import logoX from './assets/logos/Logo-Twitter.png';
+import logoPin from './assets/logos/Logo-Pinterest.png';
+import logoCont from './assets/logos/Logo-Contacto.png';
 import './Home.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+function Home() {
+  return(
+    <div className='main-nav'>
+      <p>Destinos</p>
+      <button>Sobre nosotros</button>
+      <p>|</p>
+      <div className= 'nav-icons'>
+        <img src={logoIg}/>
+        <img src={logoX}/>
+        <img src={logoPin}/>
+        <img src={logoCont}/>
+      </div>
     </div>
   );
 }
 
-export default App;
+export default Home;

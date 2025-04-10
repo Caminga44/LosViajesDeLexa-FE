@@ -76,7 +76,7 @@
     background-color: #cca881;
 }
 .user-name{
-    background: rgba (204, 168, 129, 0.5);
+    background: rgba(204, 168, 129, 0.5);
     padding: 15px;
     border-radius: 20px;
     font-size: x-large;
@@ -93,4 +93,14 @@
     align-items: center;
     border-color: #614928;
     border-width: 2px;
+}
+
+.toolbar-close{
+    margin-right: 5px;
+    border-radius: 20px;
+    height: 100%;
+    width: 50px;
+    align-items: center;
+    border: darkgoldenrod;
+    background-color: #cca881;
 }

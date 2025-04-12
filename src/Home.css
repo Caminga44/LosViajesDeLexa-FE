@@ -17,6 +17,10 @@
   color: #61dafb;
 }
 
+.spacer{
+  height: 250px;
+}
+
 .main-nav{
 background-color: #cca881;
 display: flex;
@@ -33,6 +37,15 @@ width: 100%;
 
 .nav-text{
   color: #614929;
+  font-size: 18px;
+  font-weight: 700;
+  margin-left: 300px;
+  width: auto;
+  background-color: #cca881;
+}
+
+.nav-text{
+  color: #614928;
   font-size: 18px;
   font-weight: 700;
   margin-left: 300px;
@@ -69,4 +82,31 @@ width: 100%;
   margin-right: 20px;
   height: 40px;
   width: auto;
+}
+
+.ciudades{
+  display: inline;
+  width: 100vw;
+  height: auto;
+}
+
+.ciudades-img{
+  display: inline;
+  width: 450px;
+  border-radius: 20px;
+  height: auto;
+  margin: 20px;
+}
+
+.ciudades-title{
+  font-size: 32px;
+  margin-right: 75%;
+  color: #614928;
+}
+
+.img-post{
+  width: 450px;
+  border-radius: 20px;
+  height: auto;
+  margin: 30px;
 }

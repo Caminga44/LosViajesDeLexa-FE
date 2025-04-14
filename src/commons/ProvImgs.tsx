@@ -54,7 +54,7 @@ interface IProvImg{
 }
 
 const provs: Array<IProvImg> =  [
-    {prov: alava, img: alava},
+    {prov: 'alava', img: alava},
     { prov: 'albacete', img: albacete},
     { prov: 'alicante', img: alicante},
     { prov: 'almeria', img: almeria},

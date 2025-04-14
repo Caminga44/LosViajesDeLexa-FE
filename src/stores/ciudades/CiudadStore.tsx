@@ -11,6 +11,10 @@ function ciudadesReducer (ciudadesState: ICiudades, action: ICiudadesAction): IC
     switch (action.type){
         case 'GET':{
             return {...ciudadesState, ciudades: action.payload}
+        } case 'PUT':{
+            return {...ciudadesState, ciudades: action.payload}
+        } case 'POST':{
+            return {...ciudadesState, ciudades: action.payload}
         }default:{
             return{...ciudadesState}
         }

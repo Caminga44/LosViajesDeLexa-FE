@@ -9,7 +9,7 @@ import Modal from './Modal';
 import Error from './Error';
 
 function ToolbarComponent(props: any) {
-    const {state, dispatch} = useContext(UserStore);
+    const { state, dispatch } = useContext(UserStore);
     const [loged, setLoged] = useState(false)
     const [showLogin, setShowLogin] = useState(false)
     const [user, setUser] = useState('')
@@ -18,7 +18,7 @@ function ToolbarComponent(props: any) {
     const [error, setError] = useState('')
     const [showError, setShowError] = useState(false)
     const baseURL = 'http://localhost:8080/'
-   
+
     const logOut = () => {
         setPass('')
         setUser('')
@@ -26,18 +26,18 @@ function ToolbarComponent(props: any) {
         setShowLogin(false)
         return dispatch({
             type: 'OUT',
-            payload: {name: '', password:'', admin: false}
+            payload: { name: '', password: '', admin: false }
         })
     }
 
     const login = async () => {
-        const cred = {alias: user, clave: pass}
-        await fetch(baseURL+'usuarios',{
+        const cred = { alias: user, clave: pass }
+        await fetch(baseURL + 'usuarios', {
             method: 'POST',
             body: JSON.stringify(cred)
-            }
+        }
         ).then(res => {
-            if(res.ok){
+            if (res.ok) {
                 setLoged(true)
                 setShowLogin(false)
                 setShowError(false)
@@ -57,16 +57,16 @@ function ToolbarComponent(props: any) {
             }
         })
     }
-   
+
     const postUser = async (user: string, pass: string) => {
-        const creat = {alias: user, clave: pass, creation: true}
-        await fetch (baseURL+'usuarios',{
+        const creat = { alias: user, clave: pass, creation: true }
+        await fetch(baseURL + 'usuarios', {
             method: 'POST',
             body: JSON.stringify(creat)
-            }
+        }
         ).then((res) => {
             console.log(res)
-            if(res.ok){
+            if (res.ok) {
                 setShowError(false)
                 res.json().then(data => {
                     return dispatch({
@@ -85,67 +85,67 @@ function ToolbarComponent(props: any) {
         })
     }
 
-    return(<>
+    return (<>
         {props.children}
-            <div className='toolbar' id='top'>
-                <img className='encabezado' src={encabezado} />
-                <div className='toolbar-left'>
-                    <Link to='/'><img src={logo} className='logo' /></Link>
-                    <h3 className='toolbar-title'>Tu sitio dogfriendly</h3>
-                </div>
-                    { !loged ?
-                        <form className='toolbar-right'>    
-                            <div className={showLogin ? '' : 'none-vis'}>
-                                <button onClick={(e) => {
-                                    e.preventDefault()
-                                    setShowLogin(false)
-                                    setUser('')
-                                    setPass('')
-                                }} className='toolbar-close'>X</button>
-                                <input className='toolbar-input' value={user} onChange={(e) => {
-                                    e.preventDefault()
-                                    setUser(e.target.value)
-                                }} placeholder='Usuario'/>
-                                <input className='toolbar-input' value={pass} type='password' onChange={(e) =>{
-                                    e.preventDefault()
-                                    setPass(e.target.value)
-                                }} placeholder='Contraseña'/>
-                            </div>
-                            <button className='toolbar-button' onClick={(e) => {
-                                e.preventDefault()
-                                !showLogin ? setShowLogin(true) : login()
-                                }}>Ingresar</button>
-                            <button className='toolbar-button' onClick={(e) => {
-                                e.preventDefault()
-                                showRegister(!register)
-                            }}>Registrar</button>
-                        </form>  
-                        : <div className='toolbar-right'>
-                            <h3 className='user-name'> Hola {state.alias} </h3>
-                            <img className='toolbar-out' src={out} onClick={(e) => {
-                                e.preventDefault()
-                                logOut()
-                            }}/>
-                        </div>
-                    }
-                <Modal
-                    modalState={register}
-                    show={showRegister}
-                    postUser={postUser}
-                />
-                <Error
-                    errorState={showError}
-                    error={error}
-                    show={setShowError}
-                />
+        <div className='toolbar' id='top'>
+            <img className='encabezado' src={encabezado} />
+            <div className='toolbar-left'>
+                <Link to='/'><img src={logo} className='logo' /></Link>
+                <h3 className='toolbar-title'>Tu sitio dogfriendly</h3>
             </div>
+            {!loged ?
+                <form className='toolbar-right'>
+                    <div className={showLogin ? '' : 'none-vis'}>
+                        <button onClick={(e) => {
+                            e.preventDefault()
+                            setShowLogin(false)
+                            setUser('')
+                            setPass('')
+                        }} className='toolbar-close'>X</button>
+                        <input className='toolbar-input' value={user} onChange={(e) => {
+                            e.preventDefault()
+                            setUser(e.target.value)
+                        }} placeholder='Usuario' />
+                        <input className='toolbar-input' value={pass} type='password' onChange={(e) => {
+                            e.preventDefault()
+                            setPass(e.target.value)
+                        }} placeholder='Contraseña' />
+                    </div>
+                    <button className='toolbar-button' onClick={(e) => {
+                        e.preventDefault()
+                        !showLogin ? setShowLogin(true) : login()
+                    }}>Ingresar</button>
+                    <button className='toolbar-button' onClick={(e) => {
+                        e.preventDefault()
+                        showRegister(!register)
+                    }}>Registrar</button>
+                </form>
+                : <div className='toolbar-right'>
+                    <h3 className='user-name'> Hola {state.alias} </h3>
+                    <img className='toolbar-out' src={out} onClick={(e) => {
+                        e.preventDefault()
+                        logOut()
+                    }} />
+                </div>
+            }
+            <Modal
+                modalState={register}
+                show={showRegister}
+                postUser={postUser}
+            />
+            <Error
+                errorState={showError}
+                error={error}
+                show={setShowError}
+            />
+        </div>
     </>)
 }
 
 export default function Toolbar(props: any) {
-    return(
-    <UserStoreProvider>
-        {props.children}
-        <ToolbarComponent />
-    </UserStoreProvider>)
+    return (
+        <UserStoreProvider>
+            <ToolbarComponent />
+            {props.children}
+        </UserStoreProvider>)
 }

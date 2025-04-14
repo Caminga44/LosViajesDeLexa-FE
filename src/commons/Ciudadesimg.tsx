@@ -12,7 +12,7 @@ const CiudadesImg: Array<ICiudadesImg> = [
     {ciudad: 'cariño', img: cariño},
     {ciudad: 'bilbao', img: bilbao},
     {ciudad: 'peñiscola', img: peñiscola},
-    {ciudad: 'covadonga', img: covadonga},
+    {ciudad: 'covadonga', img: covadonga}
 ]
 
 export default CiudadesImg;

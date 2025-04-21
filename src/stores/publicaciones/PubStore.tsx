@@ -1,6 +1,6 @@
 import React, {useReducer} from 'react';
 import {IPubActions, IPubs} from './PubIData';
-import {useLogin} from '../users/UserStore';
+import {useLogin} from '../Login/LoginStore';
 
 const initialState: IPubs = {
     pubs: []
@@ -20,5 +20,5 @@ function pubsReducer(pubsState: IPubs, action: IPubActions): IPubs{
 export function PubsStoreProvider(props:any) {
     const [pubsState, dispatch] = useReducer(pubsReducer, initialState)
     const {state: userState} = useLogin()
-    return (<PubStore.Provider value ={{pubsState, dispatch, loged: userState.alias != '', admin: userState.admin}}>{props.children}</PubStore.Provider>)
+    return (<PubStore.Provider value ={{pubsState, dispatch, loged: userState.alias != '', admin: userState.admin, user: userState.alias}}>{props.children}</PubStore.Provider>)
 }

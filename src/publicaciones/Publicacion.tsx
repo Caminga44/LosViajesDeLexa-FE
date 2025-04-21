@@ -4,52 +4,106 @@ import { IPub } from '../stores/publicaciones/PubIData';
 import { PubsStoreProvider, PubStore } from '../stores/publicaciones/PubStore';
 import './Pubs.css';
 import PostModal from '../commons/PostModal';
+import {ComentarioStore, ComentarioStoreProvider} from '../stores/comentario/ComentarioStore';
+import {IComentario} from '../stores/comentario/ComentarioIData';
+import Info from '../commons/Info';
 
 const Publicaciones = () => {
     return(<>
         <PubsStoreProvider>
-            <PubsComp />
+            <ComentarioStoreProvider>
+                <PubsComp/>
+            </ComentarioStoreProvider>
         </PubsStoreProvider>
     </>)
 }
 const PubsComp = () => {
-    const url = 'http://localhost:8080/publicaciones/'
-    const { id } = useParams()
-    const { dispatch, loged, admin} = useContext(PubStore)
-    const [modal, showModal] = useState(false)
-    const [crear, setCrear] = useState(false)
-    const [pub, setPub] = useState<IPub>()
+    const url = 'http://localhost:8080/publicaciones/';
+    const { ciudad } = useParams();
+    const { dispatch, loged, admin, user} = useContext(PubStore);
+    const {comentarioState, dispatch: comentarioDispatch} = useContext(ComentarioStore);
+    const [modal, showModal] = useState(false);
+    const [crear, setCrear] = useState(false);
+    const [pub, setPub] = useState<IPub>();
+    const [comentario, setComentario] = useState('');
+    const [error, setError] = useState('');
+    const [showError, setShowError] = useState(false);
 
     useEffect(() => {
-        !pub && !modal && getPubsDeatilData(id) 
-    })
+        !pub && !modal && getPubsDeatilData(ciudad) 
+    }, [])
 
-    const getPubsDeatilData = async (id: string | undefined) => {
-        await fetch(url+id).then((res) => {
+    const getComentarios = async (id: number) => {
+        await fetch(url+`/comentarios/${id}`).then((res) => {
+            if(res.ok){
+                res.json().then((data) => {
+                    if(data){
+                        comentarioDispatch({
+                            type:'GET',
+                            payload: data
+                        })
+                    }
+                })
+            }else{
+                setError('No se han podido cargar los comentarios')
+                setShowError(true)
+            }
+        })
+    }
+
+    const postComentarios = async ( texto: string, id: number) => {
+        const comentario = JSON.stringify({texto, id, user})
+        await fetch(url+'/comentarios', {
+            method:'POST',
+            body: comentario
+        }).then((res) => {
+            if(res.ok){
+                getComentarios(id)
+            }else{
+                setError('No se ha podido crear el comentario')
+                setShowError(true)
+            }
+        })
+    }
+
+    const getPubsDeatilData = async (ciudad: string | undefined) => {
+        await fetch(url+'/publicaciones'+ciudad).then((res) => {
             if(res.ok){
               res.json().then((data) => {
-                if(data.length > 0){
-                    setPub(data[0])
+                if(data){
+                    setPub(data)
+                    setCrear(false)
+                    showModal(false)
+                    getComentarios(data.id)
                     return dispatch({
                     type: 'GET',
                     payload: data
                     })
                 }  else {
-                    setCrear(true)
-                    showModal(true)
-                    return dispatch({
-                        type: 'GET',
-                        payload: {nombre: ''}
-                    })
+                    if(admin){
+                        setCrear(true)
+                        showModal(true)
+                    }else{
+                        setError('No hay publicaciones para esta ciudad')
+                        setShowError(true)
+                    }
                 }
               })
+            }else{
+                if(admin){
+                    setCrear(true)
+                    showModal(true)
+                }else{
+                    setError('No hay publicaciones para esta ciudad')
+                    setShowError(true)
+                }
             }
           })
     }
 
     const postPub = async (texto: string, ciudad:string, provincia: string, img: string) => {
         const publi = JSON.stringify({ texto, ciudad, provincia, img})
-        await fetch(url,{
+        await fetch(url+'/publicaciones',{
             method: 'POST',
             body: publi
         }).then((res) => {
@@ -60,14 +114,10 @@ const PubsComp = () => {
             }
         })
     }
-    const image = (img: string) => {
-        return `/publicaciones/${img}`
-    }
-    const splited = pub?.image.split("\/")
-    const pubImg = splited ? splited[splited?.length-1] : ''
+
     return(<>
         <div className='section'>
-            <p className='section-title'>{pub?.ciudad?.toUpperCase()}</p>
+            <p className='section-title'>{ciudad?.toUpperCase()}</p>
             { admin && pub &&
                 <div className='section-buttons'>
                     <button className='crear-button' onClick={(e) => {
@@ -78,25 +128,43 @@ const PubsComp = () => {
                 </div>
             }
         </div>
-        { pub ?
-            <div>
-                <img className='img-post' src={image(pubImg)} />
-                <p>{pub.text}</p>
-                { pub.comentario && <div>
+        { pub && <div className='comments'>
+            <div className='container'>
+                <img className='img-post' src={`/publicaciones/${pub.image?.toLowerCase()}.png`}/>
+                <p className='content-right'>{pub.text}</p>
+            </div>
+            {comentarioState.comentarios.length > 0 &&
+                <div className='comments'>
                 <p className='section-comments'>COMENTARIOS</p>
-                <p className="comment-text">{pub.comentario}</p>
-                </div>}
-            </div> : 
-            admin && <button className='crear-button' onClick={(e) => {
-                e.preventDefault()
-                showModal(!modal)
-                setCrear(true)
-            }}> CREAR PUBLICACIÓN</button> 
+                {
+                    comentarioState.comentarios.map((comentario: IComentario) => {
+                        return( <>
+                        <p className='comment-text'>{comentario.usuario}</p>
+                        <p className='comment-text'>{comentario.texto}</p>
+                        </>)
+                    })
+                }
+                </div>
+            }
+        </div>
         }
-        { loged && !showModal &&
+        { loged && !modal &&
         <div className='comment'>
-            <textarea className="comment-box" maxLength={500}/>
-            <button className="crear-button">Enviar</button>
+            <div>
+                <textarea className='comment-box' value={comentario} maxLength={500} onChange={(e) => {
+                    setComentario(e.target.value)
+                }}/>
+                <p className='char-count'>
+                    {500 - comentario.length}/500 caracteres restantes
+                </p>
+            </div>
+            <button className='comment-button' onClick={(e) => {
+                e.preventDefault()
+                if(comentario.length > 0 && pub){
+                    postComentarios(comentario, pub.id)
+                    setComentario('')
+                }
+            }}>Enviar</button>
         </div>
         }
         <PostModal 
@@ -105,6 +173,10 @@ const PubsComp = () => {
             show={showModal}
             postModal={postPub}
         />
+        <Info
+        infoState={showError}
+        info={error}
+        show={setShowError}/>+
     </>)
 }
 

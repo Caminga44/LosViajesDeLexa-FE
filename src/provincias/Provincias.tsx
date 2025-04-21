@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import provs from '../commons/ProvImgs';
 import CreateModal from '../commons/CreateModal';
-import Error from "../commons/Error";
+import Error from "../commons/Info";
 import './Prov.css'
 
 const Provincias = () => {

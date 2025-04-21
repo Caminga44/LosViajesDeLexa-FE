@@ -6,7 +6,7 @@ import logo from '../assets/logos/Logo-LVDL.png';
 import { useState, useContext } from 'react';
 import { UserStore, UserStoreProvider } from '../stores/users/UserStore';
 import Modal from './Modal';
-import Error from './Error';
+import Error from './Info';
 
 function ToolbarComponent(props: any) {
     const { state, dispatch } = useContext(UserStore);

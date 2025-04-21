@@ -1,6 +1,4 @@
-import {useContext, useEffect} from 'react';
-import {CiudadesStore, CiudadesStoreProvider} from './stores/ciudades/CiudadStore';
-import {ICiudad} from './stores/ciudades/CiudadIData';
+import {useContext, useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import logoIg from './assets/logos/Logo-Insta.png';
 import logoX from './assets/logos/Logo-Twitter.png';
@@ -8,37 +6,50 @@ import logoPin from './assets/logos/Logo-Pinterest.png';
 import logoCont from './assets/logos/Logo-Contacto.png';
 import images from './commons/Ciudadesimg';
 import './Home.css';
+import { PubsStoreProvider, PubStore } from './stores/publicaciones/PubStore';
+import {IPub} from './stores/publicaciones/PubIData';
+import Info from './commons/Info';
 
 const Home = () => {
   return(
     <>
-    <CiudadesStoreProvider>
+    <PubsStoreProvider>
       <Dashboard/>
-    </CiudadesStoreProvider>
+    </PubsStoreProvider>
     </>
   )
 }
 
 const Dashboard = () => {
-  const {ciudadesState, dispatch: ciudadesDispatch} = useContext(CiudadesStore)
-  const baseURL = 'http://localhost:8080/'
+  const {pubsState, dispatch} = useContext (PubStore);
+  const [pubs, setPubs] = useState<IPub[]>([]);
+  const [error, setError] = useState('');
+  const [modal, showModal] = useState(false);
+  const baseURL = 'http://localhost:8080/';
 
   useEffect(() => {
-    ciudadesState.ciudades.length === 0 && getCiudadesData()
+    pubsState.pubs.length == 0 && getPubsData()
   })
 
-  const getCiudadesData = async () =>{
-    await fetch (baseURL+'ciudades').then((res) => {
+  function getPubsData(){
+    fetch(baseURL + 'publicaciones').then((res) => {
       if(res.ok){
-        res.json().then((data) =>{
-          return ciudadesDispatch({
-            type: 'GET',
-            payload: data
-          })
+        res.json().then((data) => {
+          if(data){
+            setPubs(data)
+            dispatch({
+              type:'GET',
+              payload: data
+            })
+          }
         })
+      }else{
+        setError('No se han podido cargar las publicaciones')
+        showModal(true)
       }
     })
   }
+
   return (<>
   <div className='main-nav'>
     <Link className='nav-text' to ='/provincias' >Destinos</Link>
@@ -51,11 +62,11 @@ const Dashboard = () => {
         <img className= 'nav-logo' src={logoCont}/>
     </div>
   </div>
-  { (ciudadesState.ciudades.length > 0) &&
+  { images.length > 0 &&
   <div className='ciudades'>
       <h3 className='ciudades-title'>Destinos favoritos de Lexa</h3>
       {
-        ciudadesState.ciudades.slice(0,4).map((ciudad: ICiudad) =>{
+        images.map((ciudad: any) =>{
           return(
             <Ciudad value ={ciudad} key={ciudad.id}/>
         )
@@ -63,20 +74,48 @@ const Dashboard = () => {
       }
   </div>
   }
+  {pubsState.pubs.length > 0 && <>
+  <h3 className='ciudades-title'>Últimas publicaciones de Lexa</h3>
+  <div className='pubs'>
+    {
+      pubs.slice(pubs.length-2,pubs.length).map((pub: IPub) =>{
+        return(
+          <Pubs value = {pub} pubKey={pub.id}/>
+        )
+      })
+    }
+  </div>
+  </>
+  }
+  <Info
+    infoState = {modal}
+    show = {showModal}
+    info={error}/>
   </>);
   
 }
-function Ciudad (ciudad:any){
-  const image = images.find((obj) =>{
-    if(obj.ciudad == ciudad.value.nombre.toLowerCase()){
+function Pubs (pub:any){
+  const image = `/publicaciones/${pub.value.ciudad.toLowerCase()}.png`
+  return(<>
+  <div className='pub-card'>
+    <Link to = {'/publicacion/'+pub.value.ciudad} key={pub.id} className='pub-content'>
+    <img className='pub-img' src = {image}/>
+    <p className='pub-text'>{pub.value.image}</p>
+    </Link>
+  </div>
+  </>)
+}
+
+function Ciudad(ciudad:any) {
+  const image = images.find((obj) => {
+    if(obj.ciudad == ciudad?.value.ciudad?.toLowerCase()){
       return obj
     }
   })
   return(<>{
-    image &&
-    <img className='ciudades-img' src={image?.img}/>}
-    </>
-  )
+    image && <img className='ciudades-img' src={image?.img}/>
+  }
+    </>)
 }
 
 export default Home;

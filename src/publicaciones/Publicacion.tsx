@@ -4,8 +4,8 @@ import { IPub } from '../stores/publicaciones/PubIData';
 import { PubsStoreProvider, PubStore } from '../stores/publicaciones/PubStore';
 import './Pubs.css';
 import PostModal from '../commons/PostModal';
-import {ComentarioStore, ComentarioStoreProvider} from '../stores/comentario/ComentarioStore';
-import {IComentario} from '../stores/comentario/ComentarioIData';
+import {ComentarioStore, ComentarioStoreProvider} from '../stores/comentarios/ComentarioStore';
+import {IComentario} from '../stores/comentarios/ComentarioIData';
 import Info from '../commons/Info';
 
 const Publicaciones = () => {

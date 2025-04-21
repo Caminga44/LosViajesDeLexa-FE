@@ -6,7 +6,7 @@ import Toolbar from './commons/Toolbar';
 import Provincias from './provincias/Provincias';
 import Ciudades from './ciudades/Ciudades';
 import Publicaciones from './publicaciones/Publicacion';
-import Usuarios from './usuarios/Usuarios';
+import Usuarios from './usuarios/usuarios';
 
 createRoot (document.getElementById('root')!).render(
   <>

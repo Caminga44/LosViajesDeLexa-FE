@@ -72,20 +72,23 @@
     font-family: 'Poppins';
     color: #614928;
     font-size: x-large;
-    margin-left: 25px;
+    margin-left: 650px;
     padding-left: 24px;
     margin-right: auto;
-    background-color: #cca881;
+    background-color: #b5a799;
   }
+
   .comment-text{
     width: fit-content;
     border-radius: 20px;
     border-width: 3px;
     background-color: #cca881;
     padding: 20px;
-    margin-left: 25px;
-    margin-right: auto;
+    margin-left: 20px;
+    margin-right: 20px;
   }
+
+  
 
   .comment-button{
     height: auto;

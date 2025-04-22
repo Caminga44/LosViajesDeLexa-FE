@@ -139,8 +139,12 @@ const PubsComp = () => {
                 {
                     comentarioState.comentarios.map((comentario: IComentario) => {
                         return( <>
+                        <div className='comment'>
                         <p className='comment-text'>{comentario.usuario}</p>
+                        <div className='comment-text1'>
                         <p className='comment-text'>{comentario.texto}</p>
+                        </div>
+                        </div>
                         </>)
                     })
                 }

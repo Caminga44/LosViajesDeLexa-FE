@@ -4,9 +4,10 @@ import out from '../assets/logos/Logo-Out.svg';
 import encabezado from '../assets/encabezado.png';
 import logo from '../assets/logos/Logo-LVDL.png';
 import { useState, useContext } from 'react';
-import { UserStore, UserStoreProvider } from '../stores/users/UserStore';
+import { UserStore, UserStoreProvider } from '../stores/login/LoginStore';
 import Modal from './Modal';
 import Error from './Info';
+import Info from './Info';
 
 function ToolbarComponent(props: any) {
     const { state, dispatch } = useContext(UserStore);
@@ -94,38 +95,37 @@ function ToolbarComponent(props: any) {
                 <h3 className='toolbar-title'>Tu sitio dogfriendly</h3>
             </div>
             {!loged ?
-                <form className='toolbar-right'>
-                    <div className={showLogin ? '' : 'none-vis'}>
+                <form className='toolbar-right' onSubmit={(e) => {
+                    e.preventDefault();
+                    !showLogin ? setShowLogin(true) : login();
+                }}>
+                    { showLogin && (<>
                         <button onClick={(e) => {
-                            e.preventDefault()
                             setShowLogin(false)
                             setUser('')
                             setPass('')
-                        }} className='toolbar-close'>X</button>
+                        }} className='toolbar-close' type='button'>X</button>
                         <input className='toolbar-input' value={user} onChange={(e) => {
-                            e.preventDefault()
                             setUser(e.target.value)
                         }} placeholder='Usuario' />
                         <input className='toolbar-input' value={pass} type='password' onChange={(e) => {
-                            e.preventDefault()
                             setPass(e.target.value)
                         }} placeholder='Contraseña' />
-                    </div>
-                    <button className='toolbar-button' onClick={(e) => {
-                        e.preventDefault()
-                        !showLogin ? setShowLogin(true) : login()
-                    }}>Ingresar</button>
-                    <button className='toolbar-button' onClick={(e) => {
-                        e.preventDefault()
+                        </>)}
+                    <button className='toolbar-button' type='submit'>Ingresar</button>
+                    <button className='toolbar-button' type='button' onClick={(e) => {
                         showRegister(!register)
                     }}>Registrar</button>
                 </form>
                 : <div className='toolbar-right'>
-                    <h3 className='user-name'> Hola {state.alias} </h3>
-                    <img className='toolbar-out' src={out} onClick={(e) => {
-                        e.preventDefault()
-                        logOut()
-                    }} />
+                    <Link to='/usuarios'>
+                        <h3 className='user-name'> Hola {state.alias} </h3> 
+                    </Link>
+                    <Link to='/'>
+                        <img className='toolbar-out' src={out} onClick={(e) => {
+                            logOut()
+                        }} />
+                    </Link>
                 </div>
             }
             <Modal
@@ -133,9 +133,9 @@ function ToolbarComponent(props: any) {
                 show={showRegister}
                 postUser={postUser}
             />
-            <Error
-                errorState={showError}
-                error={error}
+            <Info
+                infoState={showError}
+                info={error}
                 show={setShowError}
             />
         </div>

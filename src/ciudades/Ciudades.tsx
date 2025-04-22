@@ -21,7 +21,7 @@ const CiudadesComp = () => {
     const [crear, setCrear] = useState(false);
     useEffect(() => {
         ciudadesState.ciudades.length === 0 && getCiudadesData()
-    })
+    }, [])
 
     const getCiudadesData = async() => {
         await fetch(url).then((res) => {
@@ -37,10 +37,9 @@ const CiudadesComp = () => {
     }
 
     const postCiudadesData = async (nombre: string) => {
-        const provId = ciudadesState.ciudades.find((ciudad: ICiudad) => ciudad.provincia.toLowerCase() == prov).provId
         const payload = JSON.stringify({
             nombre: nombre,
-            provinciasId: provId
+            provinciaId: prov
         })
         await fetch (url, {
             method: 'POST',
@@ -97,7 +96,7 @@ const CiudadesComp = () => {
       <div className='cities-spacer'/>
         {
             ciudadesState.ciudades.map((ciudad: ICiudad) => {
-                if(ciudad.provincia.toLowerCase() == prov){
+                if(ciudad.provincia?.toLowerCase() == prov){
                     return(<Ciudad ciudad ={ciudad} key={ciudad.id}/>)
                 }
             })

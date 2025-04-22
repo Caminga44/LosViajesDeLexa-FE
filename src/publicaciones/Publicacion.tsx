@@ -18,7 +18,7 @@ const Publicaciones = () => {
     </>)
 }
 const PubsComp = () => {
-    const url = 'http://localhost:8080/publicaciones/';
+    const url = 'http://localhost:8080/';
     const { ciudad } = useParams();
     const { dispatch, loged, admin, user} = useContext(PubStore);
     const {comentarioState, dispatch: comentarioDispatch} = useContext(ComentarioStore);
@@ -34,7 +34,7 @@ const PubsComp = () => {
     }, [])
 
     const getComentarios = async (id: number) => {
-        await fetch(url+`/comentarios/${id}`).then((res) => {
+        await fetch(url+'/comentarios/'+id).then((res) => {
             if(res.ok){
                 res.json().then((data) => {
                     if(data){
@@ -67,7 +67,7 @@ const PubsComp = () => {
     }
 
     const getPubsDeatilData = async (ciudad: string | undefined) => {
-        await fetch(url+'/publicaciones'+ciudad).then((res) => {
+        await fetch(url+'/publicaciones/'+ciudad).then((res) => {
             if(res.ok){
               res.json().then((data) => {
                 if(data){
@@ -109,7 +109,7 @@ const PubsComp = () => {
         }).then((res) => {
             if(res.ok) {
                 setPub(JSON.parse(publi))
-                getPubsDeatilData(pub?.id.toString())
+                getPubsDeatilData(ciudad)
                 return
             }
         })
@@ -123,7 +123,7 @@ const PubsComp = () => {
                     <button className='crear-button' onClick={(e) => {
                         e.preventDefault()
                         setCrear(false)
-                        showModal(!modal)
+                        showModal(true)
                     }}> EDITAR PUBLICACIÓN</button> 
                 </div>
             }
@@ -176,7 +176,7 @@ const PubsComp = () => {
         <Info
         infoState={showError}
         info={error}
-        show={setShowError}/>+
+        show={setShowError}/>
     </>)
 }
 

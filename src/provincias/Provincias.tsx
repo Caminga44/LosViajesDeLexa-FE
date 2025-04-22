@@ -26,7 +26,7 @@ const ProvinciasComp = () => {
     const url = 'http://localhost:8080/provincias/'
     useEffect(() => {
         provState.provincias.length == 0 && getProvData()
-    })
+    }, [])
 
     const getProvData = async () => {
         const data = await fetch(url,{
@@ -82,7 +82,7 @@ const ProvinciasComp = () => {
 
     function Provincia(_: any){
         const image = provs.find((prov) => {
-            if(prov.prov == _.value.nombre.toLowerCase()){
+            if(prov.prov == _.value.nombre?.toLowerCase()){
             return prov
             }
         })
@@ -125,8 +125,8 @@ const ProvinciasComp = () => {
             putModal={putProvData}
         />
         <Error 
-            errorState={showError}
-            error={error} 
+            infoState={showError}
+            info={error} 
             show={setShowError}
         />
     </>)

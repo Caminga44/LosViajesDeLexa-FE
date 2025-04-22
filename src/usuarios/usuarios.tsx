@@ -1,6 +1,6 @@
 import {UsuarioStoreProvider, UsuarioStore} from '../stores/usuarios/UsuarioStore';
 import { useContext, useEffect, useState } from 'react';
-import './Usuarios.css';
+import './usuarios.css';
 import {IUsuario} from '../stores/usuarios/UsuarioIData';
 import ojoAbierto from '../assets/ojo-abierto.png';
 import ojoCerrado from '../assets/ojo-cerrado.png';
@@ -15,7 +15,7 @@ const Usuarios = () => {
 }
 
 const UsuariosComp = () => {
-    const url = 'http:// localhost:8080/';
+    const url = 'http://localhost:8080/';
     const {usuarioState, dispatch, user} = useContext(UsuarioStore)
     const [usuarios, setUsuarios] = useState([])
 
@@ -24,7 +24,7 @@ const UsuariosComp = () => {
     }, [])
 
     const getUsuariosData = async () => {
-        await fetch(url+'/usuarios').then((res) => {
+        await fetch(url+'usuarios').then((res) => {
             if(res.ok){
                 res.json().then((data) => {
                     if(data){
@@ -40,7 +40,7 @@ const UsuariosComp = () => {
     }
 
     const putUser = async ( user: any) => {
-        await fetch(url+'/usuarios',{
+        await fetch(url+'usuarios',{
             method:'PUT',
             body: JSON.stringify(user)
         }).then((res) => {
@@ -70,7 +70,7 @@ const UsuariosComp = () => {
         const[modalAction, setModalAction] = useState<() => void> (() =>{});
         return(
             <>
-                <input className='alias.input' type= 'text' value={alias} onChange={(e) => {
+                <input className='alias-input' type= 'text' value={alias} onChange={(e) => {
                     setAlias(e.target.value)
                 }}/>
                 <input className='toggle' type='checkbox' checked= {admin} onClick={(e) => {
@@ -134,7 +134,7 @@ const UsuariosComp = () => {
                     setModal(true)
                     setInfo('¿Está seguro de que desea modificar el usuario?')
                     setModalAction(() => () => {
-                        deleteUser({oldAlias: oldAlias, alias: alias, clave: clave, admin: _.value.admin})
+                        putUser({oldAlias: oldAlias, alias: alias, clave: clave, admin: _.value.admin})
                     })
                 }}>✏️</button>
                 <Info infoState={modal} info= {info} show={setModal} action={modalAction}/>
@@ -143,7 +143,7 @@ const UsuariosComp = () => {
      }
 
      const usuario = usuarios.length > 0 ? usuarios.find((it: IUsuario) => {
-        if(it.alias === user.alias)
+        if(it.id === user.id)
             return it
      }) : user
      return(<>
@@ -158,20 +158,20 @@ const UsuariosComp = () => {
                 <div className='grid-header'> Clave</div>
                 <div className='grid-header'>Eliminar</div>
                 <div className='grid-header'>Editar</div>
-                <UsuarioPropio value={usuario} key={usuario.alias}/>
+                <UsuarioPropio value={usuario} key={usuario.id}/>
             </div>
             {user.admin &&
             <> 
             <div className='spacer'/>
             <p className='user-title'> Panel de administración</p>
-            <div className='user.grid'>
+            <div className='user-grid'>
                 <div className='grid-header'>Alias</div>
                 <div className='grid-header'>Admin</div>
                 <div className='grid-header'>Eliminar</div>
                 <div className='grid-header'>Editar</div>
                 {usuarios.map((user: IUsuario) => {
                     return(
-                        <Usuario value={user} key={user.alias}/>
+                        <Usuario value={user} key={user.id}/>
                     )
                 })}
             </div>

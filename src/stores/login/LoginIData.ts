@@ -1,4 +1,5 @@
 export interface ILogin{
+    id: number,
     alias: string,
     clave: string,
     admin: boolean,

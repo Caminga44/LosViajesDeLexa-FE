@@ -3,6 +3,7 @@ export interface IUsuarios{
 }
 
 export interface IUsuario{
+    id: number,
     alias: string,
     clave: string,
     admin: number

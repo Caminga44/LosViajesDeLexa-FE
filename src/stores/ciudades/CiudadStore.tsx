@@ -1,5 +1,6 @@
 import React, {useReducer} from 'react';
 import {ICiudades, ICiudadesAction} from './CiudadIData';
+import { useLogin } from '../login/LoginStore';
 
 const initialState: ICiudades = {
     ciudades:[]
@@ -23,5 +24,6 @@ function ciudadesReducer (ciudadesState: ICiudades, action: ICiudadesAction): IC
 
 export function CiudadesStoreProvider(props: any){
     const [ciudadesState, dispatch] = useReducer(ciudadesReducer, initialState)
-    return(<CiudadesStore.Provider value={{ciudadesState, dispatch}}>{props.children}</CiudadesStore.Provider>)
+    const { state } = useLogin()
+    return(<CiudadesStore.Provider value={{ciudadesState, dispatch, admin: state.admin == 1}}>{props.children}</CiudadesStore.Provider>)
 }

@@ -1,5 +1,5 @@
 import React  from "react";
-import './Error.css'
+import './Info.css'
 
 interface InfoProps {
     infoState: boolean;
@@ -20,6 +20,7 @@ const Info: React.FC<InfoProps> = ({ infoState, info, show, action }) => {
                         <h2 className="error-text">{info}</h2>
                         <button className="error-confirm" onClick={(e) => {
                             e.preventDefault()
+                            action?.()
                             show(false)}}>OK</button>
                     </div>
                 </div>

@@ -68,6 +68,7 @@ const UsuariosComp = () => {
         const [info, setInfo] = useState('')
         const [modal, setModal] = useState(false)
         const[modalAction, setModalAction] = useState<() => void> (() =>{});
+        const [logOut, setLogOut] = useState(false)
         return(
             <>
                 <input className='alias-input' type= 'text' value={alias} onChange={(e) => {
@@ -82,6 +83,7 @@ const UsuariosComp = () => {
                 <button className='delete-btn' title='Eliminar usuario' onClick={() => {
                     setModal(true)
                     setInfo('¿Está seguro de que desea eliminar al usuario?')
+                    setLogOut(user.alias == alias)
                     setModalAction(() => () => {
                         deleteUser({alias: alias})
                     })
@@ -89,11 +91,12 @@ const UsuariosComp = () => {
                 <button className='edit-btn' onClick={() => {
                     setModal(true)
                     setInfo('¿Está seguro de que desea modificar al usuario?')
+                    setLogOut(false)
                     setModalAction(() => () => {
                         putUser({oldAlias: oldAlias, alias: alias, clave: _.value.clave, admin: admin ? 1 : 0 })
                     })
                 }}>✏️</button>
-                <Info infoState={modal} info={info} show={setModal} action={modalAction}/>
+                <Info infoState={modal} info={info} show={setModal} action={modalAction} logOut={logOut}/>
             </>
         )
     }
@@ -106,6 +109,7 @@ const UsuariosComp = () => {
         const [info, setInfo] = useState('')
         const [modal, setModal] = useState (false)
         const [modalAction, setModalAction] = useState<() => void> (() => {});
+        const [logOut, setLogOut] = useState(false)
         return (
             <>
                 <input className='alias-input' type='text' value={alias} onChange={(e) => {
@@ -129,15 +133,17 @@ const UsuariosComp = () => {
                     setModalAction(() => () => {
                         deleteUser({alias: alias})
                     })
+                    setLogOut(true)
                 }}>🗑️</button>
                 <button className='edit-btn' title='Eliminar usuario' onClick={() => {
                     setModal(true)
                     setInfo('¿Está seguro de que desea modificar el usuario?')
+                    setLogOut(false)
                     setModalAction(() => () => {
                         putUser({oldAlias: oldAlias, alias: alias, clave: clave, admin: _.value.admin})
                     })
                 }}>✏️</button>
-                <Info infoState={modal} info= {info} show={setModal} action={modalAction}/>
+                <Info infoState={modal} info= {info} show={setModal} action={modalAction} logOut={logOut}/>
             </>
         )
      }

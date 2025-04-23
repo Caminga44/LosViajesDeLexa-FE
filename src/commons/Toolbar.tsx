@@ -6,7 +6,6 @@ import logo from '../assets/logos/Logo-LVDL.png';
 import { useState, useContext } from 'react';
 import { UserStore, UserStoreProvider } from '../stores/login/LoginStore';
 import Modal from './Modal';
-import Error from './Info';
 import Info from './Info';
 
 function ToolbarComponent(props: any) {
@@ -94,7 +93,7 @@ function ToolbarComponent(props: any) {
                 <Link to='/'><img src={logo} className='logo' /></Link>
                 <h3 className='toolbar-title'>Tu sitio dogfriendly</h3>
             </div>
-            {!loged ?
+            {(!loged  || state.alias == '')?
                 <form className='toolbar-right' onSubmit={(e) => {
                     e.preventDefault();
                     !showLogin ? setShowLogin(true) : login();

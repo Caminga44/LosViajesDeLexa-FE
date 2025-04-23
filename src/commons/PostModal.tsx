@@ -4,9 +4,9 @@ import logo from '../assets/logos/Logo-LVDL.png'
 
 interface ModalProps {
     modalState: boolean;
-    crear: boolean;
+    methodText: string;
     show: (value: boolean) => void;
-    postModal: (texto: string, ciudad:string, provincia: string, img: string) => void
+    method: (texto: string, ciudad:string, provincia: string, img: string) => void
   }
   
   
@@ -30,23 +30,32 @@ interface ModalProps {
             }}>Siguiente</button>
         </>)
 }
-const StepOne = ({texto, setTexto, setStep}: any) => {
+const StepOne = ({texto, setTexto, setStep, ciudad, provincia, img, show, method, modalState, methodText}: any) => {
     return ( <>
-            <input className='post-box' value={texto} onChange={(e) => {
-                e.preventDefault()
-                setTexto(e.target.value)
-            }}/>
+            <div>
+                <textarea className='post-box' value={texto} onChange={(e) => {
+                    e.preventDefault()
+                    setTexto(e.target.value)
+                }}/>
+                <p className='char-count'>
+                        {1000 - texto.length}/1000 caracteres restantes
+                </p>
+            </div>
             <div className='buttons-container'>
-                <button className='post-button' onClick={(e) => {
+                <button className='post-button' type='button' onClick={(e) => {
                     e.preventDefault()
                     setStep(0)
                 }}>Anterior</button>
-                <button className='post-button' type='submit'>Crear</button>
+                <button className='post-button' type='button' onClick={(e)=> {
+                        e.preventDefault()
+                        show(!modalState)
+                        method(texto, ciudad, provincia, img)
+                }}>{methodText}r</button>
             </div>
         </>
     )}
   
-  const PostModal: React.FC<ModalProps> = ({ modalState, show, postModal: postProv }) => {
+  const PostModal: React.FC<ModalProps> = ({ modalState, show, method: method, methodText: methodText }) => {
     const [texto, setTexto] = useState('')
     const [ciudad, setCiudad] = useState('')
     const [provincia, setProvincia] = useState('')
@@ -60,15 +69,11 @@ const StepOne = ({texto, setTexto, setStep}: any) => {
                         e.preventDefault()
                         show(!modalState)}}
                     >X</button>
-                    <h2>Crea el nuevo post</h2>
+                    <h2>{methodText} el nuevo post</h2>
                     <img className='modal-logo' src={logo} />
-                    <form className='modal-form' onSubmit={(e) => {
-                        e.preventDefault()
-                        show(!modalState)
-                        postProv(texto, ciudad, provincia, img)
-                    }}>     
+                    <form className='modal-form'>     
                     {step == 0 ? <StepZero ciudad={ciudad} setCiudad={setCiudad} provincia={provincia} setProvincia={setProvincia} img={img} setImg={setImg} setStep={setStep}/> 
-                    : <StepOne texto={texto} setTexto={setTexto} setStep={setStep}/>}
+                    : <StepOne texto={texto} setTexto={setTexto} setStep={setStep} ciudad={ciudad} provincia={provincia} img={img} show={show} method={method} modalState={modalState} methodText={methodText}/>}
                     </form>
                 </div>
             </div>

@@ -115,6 +115,19 @@ const PubsComp = () => {
         })
     }
 
+    const editPub = async (texto: string, ciudad:string, provincia: string, img: string) => {
+        const publi = JSON.stringify({ texto, ciudad, provincia, img})
+        await fetch(url+'/publicaciones/'+pub?.id,{
+            method: 'PUT',
+            body: publi
+        }).then((res) => {
+            if(res.ok) {
+                setPub(JSON.parse(publi))
+                getPubsDeatilData(ciudad)
+                return
+            }
+        })
+    }
     return(<>
         <div className='section'>
             <p className='section-title'>{ciudad?.toUpperCase()}</p>
@@ -159,7 +172,7 @@ const PubsComp = () => {
                     setComentario(e.target.value)
                 }}/>
                 <p className='char-count'>
-                    {500 - comentario.length}/500 caracteres restantes
+                    {1000 - comentario.length}/1000 caracteres restantes
                 </p>
             </div>
             <button className='comment-button' onClick={(e) => {
@@ -173,9 +186,9 @@ const PubsComp = () => {
         }
         <PostModal 
             modalState ={modal}
-            crear = {crear}
+            methodText = {crear ? 'Crea' : 'Edita'}
             show={showModal}
-            postModal={postPub}
+            method={crear ? postPub : editPub}
         />
         <Info
         infoState={showError}

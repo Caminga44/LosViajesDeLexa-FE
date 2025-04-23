@@ -53,7 +53,7 @@ const Home = () => {
     <div className='barra'>
       <div className='main-nav'>
       <Link className='nav-text' to='/provincias'>Destinos</Link>
-        <button className='nav-text'>Sobre Nosotros</button>
+      <Link className='nav-text' to='/sobrenosotros'>Sobre Nosotros</Link>
         <p className='nav-separator'> | </p>
         <div className='nav-icons'>
             <img className='nav-logo' src={logoIg} />

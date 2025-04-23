@@ -7,6 +7,7 @@ import Provincias from './provincias/Provincias';
 import Ciudades from './ciudades/Ciudades';
 import Publicaciones from './publicaciones/Publicacion';
 import Usuarios from './usuarios/usuarios';
+import SobreNosotros from './SobreNosotros';
 
 createRoot (document.getElementById('root')!).render(
   <>
@@ -18,6 +19,7 @@ createRoot (document.getElementById('root')!).render(
      <Route path='/ciudades/:prov' element={<Ciudades/>}/>
      <Route path='/publicacion/:ciudad' element={<Publicaciones/>} />
      <Route path='/usuarios' element={<Usuarios/>} />
+     <Route path='/sobrenosotros' element={<SobreNosotros />} />
     </Routes>
     </Toolbar>
    </BrowserRouter>

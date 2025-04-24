@@ -86,7 +86,6 @@ function ToolbarComponent(props: any) {
     }
 
     return (<>
-        {props.children}
         <div className='toolbar' id='top'>
             <img className='encabezado' src={encabezado} />
             <div className='toolbar-left'>

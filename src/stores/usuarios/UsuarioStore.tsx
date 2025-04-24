@@ -1,4 +1,4 @@
-import React, {useReducer} from 'react';
+import React, {useContext, useReducer} from 'react';
 import {IUsuarios, IUsuarioAction} from './UsuarioIData';
 import {useLogin} from '../login/LoginStore';
 
@@ -26,10 +26,10 @@ function usuarioReducer(state: IUsuarios, action: IUsuarioAction): IUsuarios{
 
 export const UsuarioStoreProvider = ({children}: any) =>{
     const [usuarioState, dispatch] = useReducer(usuarioReducer, initialState)
-    const {state: loginState} = useLogin()
+    const {state: loginState, dispatch: loginDispatch} = useLogin()
 
     return (
-        <UsuarioStore.Provider value = {{usuarioState, dispatch, user: loginState}}>
+        <UsuarioStore.Provider value = {{usuarioState, dispatch, user: loginState, loginDispatch}}>
             {children}
         </UsuarioStore.Provider>
     )

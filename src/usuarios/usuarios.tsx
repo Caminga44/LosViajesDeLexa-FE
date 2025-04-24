@@ -5,6 +5,7 @@ import {IUsuario} from '../stores/usuarios/UsuarioIData';
 import ojoAbierto from '../assets/ojo-abierto.png';
 import ojoCerrado from '../assets/ojo-cerrado.png';
 import Info from '../commons/Info';
+import { UserStore } from '../stores/login/LoginStore';
 
 const Usuarios = () => {
     return(
@@ -16,6 +17,7 @@ const Usuarios = () => {
 
 const UsuariosComp = () => {
     const url = 'http://localhost:8080/';
+    const { state, dispatch: loginDispatch } = useContext(UserStore);
     const {usuarioState, dispatch, user} = useContext(UsuarioStore)
     const [usuarios, setUsuarios] = useState([])
 
@@ -46,6 +48,12 @@ const UsuariosComp = () => {
         }).then((res) => {
             if(res.ok){
                 getUsuariosData()
+                if(user.id == usuario.id){
+                    return loginDispatch({
+                        type: 'LOGIN',
+                        payload: { id: state.id, alias: user.alias, clave: user.clave, admin: user.admin, loged: true }
+                    })
+                }
             }
         })
     }
@@ -93,7 +101,7 @@ const UsuariosComp = () => {
                     setInfo('¿Está seguro de que desea modificar al usuario?')
                     setLogOut(false)
                     setModalAction(() => () => {
-                        putUser({oldAlias: oldAlias, alias: alias, clave: _.value.clave, admin: admin ? 1 : 0 })
+                        putUser({id: _.value.id,oldAlias: oldAlias, alias: alias, clave: _.value.clave, admin: admin ? 1 : 0 })
                     })
                 }}>✏️</button>
                 <Info infoState={modal} info={info} show={setModal} action={modalAction} logOut={logOut}/>
@@ -140,7 +148,7 @@ const UsuariosComp = () => {
                     setInfo('¿Está seguro de que desea modificar el usuario?')
                     setLogOut(false)
                     setModalAction(() => () => {
-                        putUser({oldAlias: oldAlias, alias: alias, clave: clave, admin: _.value.admin})
+                        putUser({id: _.value.id, oldAlias: oldAlias, alias: alias, clave: clave, admin: _.value.admin})
                     })
                 }}>✏️</button>
                 <Info infoState={modal} info= {info} show={setModal} action={modalAction} logOut={logOut}/>
@@ -149,7 +157,7 @@ const UsuariosComp = () => {
      }
 
      const usuario = usuarios.length > 0 ? usuarios.find((it: IUsuario) => {
-        if(it.id === user.id)
+        if(it.id === user?.id)
             return it
      }) : user
      return(<>
@@ -164,7 +172,7 @@ const UsuariosComp = () => {
                 <div className='grid-header'> Clave</div>
                 <div className='grid-header'>Eliminar</div>
                 <div className='grid-header'>Editar</div>
-                <UsuarioPropio value={usuario} key={usuario.id}/>
+                <UsuarioPropio value={usuario} key={usuario?.id}/>
             </div>
             {user.admin &&
             <> 
@@ -177,7 +185,7 @@ const UsuariosComp = () => {
                 <div className='grid-header'>Editar</div>
                 {usuarios.map((user: IUsuario) => {
                     return(
-                        <Usuario value={user} key={user.id}/>
+                        <Usuario value={user} key={user?.id}/>
                     )
                 })}
             </div>

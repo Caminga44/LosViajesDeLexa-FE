@@ -11,9 +11,15 @@ import SobreNosotros from './SobreNosotros';
 
 createRoot (document.getElementById('root')!).render(
   <>
+  {/* Browser Router es el componente padre que tiene que envolver a todo lo que queramos que sea navegable */}
    <BrowserRouter>
+   {/* Como necesitamos que la toolbar sea visible en todas las pantallas, tiene que envolver a todas las rutas 
+   y estar dentro de browser routerpara ejecutar sus navegaciones */}
    <Toolbar>
+    {/*Routes englobará todas las rutas navegables de nuestra aplicación*/}
     <Routes>
+      {/*En cada route definiremos el path mediante el cual se podrá redirigir a el compononque que queramos
+      en cada caso y que estará definido en element*/}
      <Route path='/' element={<Home /> } />
      <Route path='/provincias' element= {<Provincias/>} />
      <Route path='/ciudades/:prov' element={<Ciudades/>}/>
